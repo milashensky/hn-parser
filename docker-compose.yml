@@ -1,0 +1,59 @@
+version: '2.1'
+
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    environment:
+      POSTGRES_USER: chat
+      POSTGRES_PASSWORD: chat
+      POSTGRES_DB: chat
+    ports:
+      - "12217:27017"
+    volumes:
+      - dbdata:/var/lib/mongodb/data
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  nginx:
+    restart: always
+    image: nginx:mainline
+    ports:
+      - "12280:80"
+    volumes:
+      - ./container/parser.conf:/etc/nginx/conf.d/default.conf
+      - .:/app
+  api:
+    restart: always
+    build: .
+    command: python ./main.py
+    environment:
+      DB_HOST: mongodb
+    volumes:
+      - .:/app
+      - shared_volume:/shared
+    ports:
+      - "12080:8080"
+    links:
+      - mongodb:mongodb
+    depends_on:
+      - mongodb
+  parse:
+    restart: always
+    build: .
+    command: python ./parse.py -d -t 60
+    environment:
+      DB_HOST: mongodb
+    volumes:
+      - .:/app
+      - shared_volume:/shared
+    links:
+      - mongodb:mongodb
+    depends_on:
+      - mongodb
+
+volumes:
+  dbdata:
+  shared_volume:
