@@ -9,3 +9,5 @@ DB_CLIENT = 'mongodb://{host}:{port}/{name}'.format(host=DB_HOST, port=DB_PORT, 
 
 URL_TO_PARSE = 'https://news.ycombinator.com/news'
 DEFAULT_TIMEOUT = 60
+
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"

@@ -1,4 +1,7 @@
 from aiohttp import web
+from datetime import datetime
+
+from parser import settings
 
 routes = web.RouteTableDef()
 
@@ -22,4 +25,4 @@ async def posts(request):
     cursor.skip(offset)
     res = await cursor.to_list(length=limit)
     cursor.close()
-    return web.json_response(list(map(lambda x: {'id': str(x.pop('_id')), **x}, res)))
+    return web.json_response(list(map(lambda x: {'id': str(x.pop('_id')), 'created': datetime.fromtimestamp(x.pop('created')).strftime(settings.DATETIME_FORMAT), **x}, res)))

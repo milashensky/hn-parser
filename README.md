@@ -61,3 +61,10 @@ localhost:8080/posts?offset=10
 
 ```
 will return posts, skipping first 10
+
+
+
+## Tests
+```
+python -m unittest tests
+```
