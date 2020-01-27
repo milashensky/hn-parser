@@ -15,4 +15,5 @@ if __name__ == '__main__':
     app.add_routes(routes)
     app.client = ma.AsyncIOMotorClient(settings.DB_CLIENT)
     app.db = app.client[settings.DB_NAME]
-    web.run_app(app)
+    PORT = os.environ.get('PORT', 8080)
+    web.run_app(app, port=PORT)

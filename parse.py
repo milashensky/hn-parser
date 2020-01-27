@@ -25,7 +25,7 @@ async def handle(timeout, daemon=False):
             await asyncio.sleep(timeout * 60)
     else:
         print("parse once")
-        await iteration()
+        await iteration(collection)
     print("stop parse")
     return True
 
