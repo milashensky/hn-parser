@@ -9,8 +9,8 @@ routes = web.RouteTableDef()
 @routes.view('/posts')
 async def posts(request):
     ordering = request.rel_url.query.get('order')
-    offset = abs(int(request.rel_url.query.get('offset', 0)))
-    limit = abs(int(request.rel_url.query.get('limit', 0)))
+    offset = abs(int(request.rel_url.query.get('offset', None) or 0))
+    limit = abs(int(request.rel_url.query.get('limit', None) or 0))
     if not limit:
         limit = await request.app.db.posts.count_documents({})
     direction = 1
